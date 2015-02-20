@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import com.runops.instagramviewer.R;
 import com.runops.instagramviewer.model.Media;
+import com.runops.instagramviewer.transformation.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MediaArrayAdapter extends ArrayAdapter<Media>{
 
@@ -36,13 +39,15 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
         ImageView ivProfilePicture = (ImageView) convertView.findViewById(R.id.ivProfilePicture);
 
         tvUsername.setText(media.getUser().getUsername());
-        tvCaption.setText(media.getCaption().getText());
-        tvLikeCount.setText(media.getLikes().getCount() + " likes");
+        if (media.getCaption() != null) {
+            tvCaption.setText(media.getCaption().getText());
+        }
+        tvLikeCount.setText(NumberFormat.getNumberInstance(Locale.getDefault()).format(media.getLikes().getCount()) + " likes");
 
         Picasso.with(getContext()).load(media.getImages().getStandardResolution().getUrl())
                 .into(ivPrimaryImage);
 
-        Picasso.with(getContext()).load(media.getUser().getProfilePicture())
+        Picasso.with(getContext()).load(media.getUser().getProfilePicture()).transform(new RoundedTransformation())
                 .into(ivProfilePicture);
 
         return convertView;
