@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.runops.instagramviewer.adapter.MediaArrayAdapter;
 import com.runops.instagramviewer.api.InstagramApi;
 import com.runops.instagramviewer.model.Caption;
 import com.runops.instagramviewer.model.Media;
@@ -25,9 +25,8 @@ public class FeedActivity extends ActionBarActivity {
 
     private static final String CLIENT_ID = "db6e497b51c74edaab8939e9308904ef";
 
-    private ListView lvItems;
-    private ArrayList<String> items;
-    private ArrayAdapter<String> itemsAdapter;
+    private ArrayList<Media> items;
+    private MediaArrayAdapter feedAdapter;
 
 
     @Override
@@ -37,10 +36,10 @@ public class FeedActivity extends ActionBarActivity {
 
         fetchPopularPhotos();
 
-        lvItems = (ListView) findViewById(R.id.listView);
-        items = new ArrayList<String>();
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        lvItems.setAdapter(itemsAdapter);
+        ListView lvFeed = (ListView) findViewById(R.id.lvFeed);
+        items = new ArrayList<Media>();
+        feedAdapter = new MediaArrayAdapter(this, items);
+        lvFeed.setAdapter(feedAdapter);
     }
 
 
@@ -49,14 +48,8 @@ public class FeedActivity extends ActionBarActivity {
             @Override
             public void success(Popular popular, Response response) {
                 List<Media> mediaList = popular.getMediaList();
-                for (Media media : mediaList) {
-                    Caption caption = media.getCaption();
-                    if (caption != null) {
-                        items.add(caption.getText());
-                    }
-
-                }
-                itemsAdapter.notifyDataSetChanged();
+                items.addAll(mediaList);
+                feedAdapter.notifyDataSetChanged();
 
                 Log.i("viewer","everything is great!");
             }
