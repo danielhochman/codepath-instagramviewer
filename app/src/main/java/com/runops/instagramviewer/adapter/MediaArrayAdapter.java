@@ -31,14 +31,19 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
 
         TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
         TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
-
+        TextView tvLikeCount = (TextView) convertView.findViewById(R.id.tvLikeCount);
         ImageView ivPrimaryImage = (ImageView) convertView.findViewById(R.id.ivPrimaryImage);
+        ImageView ivProfilePicture = (ImageView) convertView.findViewById(R.id.ivProfilePicture);
+
+        tvUsername.setText(media.getUser().getUsername());
+        tvCaption.setText(media.getCaption().getText());
+        tvLikeCount.setText(media.getLikes().getCount() + " likes");
 
         Picasso.with(getContext()).load(media.getImages().getStandardResolution().getUrl())
                 .into(ivPrimaryImage);
 
-        tvUsername.setText(media.getUser().getUsername());
-        tvCaption.setText(media.getCaption().getText());
+        Picasso.with(getContext()).load(media.getUser().getProfilePicture())
+                .into(ivProfilePicture);
 
         return convertView;
     }

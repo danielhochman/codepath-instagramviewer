@@ -6,6 +6,7 @@ public class Media {
     private User user;
     private Caption caption;
     private Images images;
+    private Likes likes;
 
     public String getId() {
         return id;
@@ -21,5 +22,9 @@ public class Media {
 
     public Images getImages() {
         return images;
+    }
+
+    public Likes getLikes() {
+        return likes;
     }
 }
