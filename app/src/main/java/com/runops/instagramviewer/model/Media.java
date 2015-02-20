@@ -7,6 +7,7 @@ public class Media {
     private Caption caption;
     private Images images;
     private Likes likes;
+    private Long created_time;
 
     public String getId() {
         return id;
@@ -26,5 +27,9 @@ public class Media {
 
     public Likes getLikes() {
         return likes;
+    }
+
+    public long getCreatedTime() {
+        return created_time;
     }
 }
