@@ -53,7 +53,7 @@
 
     <com.runops.instagramviewer.DynamicImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/ivPrimaryImage"
         android:scaleType="fitXY"
         android:padding="0dp"
@@ -87,28 +87,13 @@
         android:layout_toEndOf="@id/ivLikeIcon"
         android:layout_toRightOf="@id/ivLikeIcon" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Caption"
-        android:layout_marginTop="6dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:id="@+id/tvCaption"
-        android:textColor="#666666"
-        android:textColorLink="@color/primary_blue"
-        android:layout_below="@+id/ivLikeIcon"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <LinearLayout
         android:id="@+id/llComments"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCaption"
+        android:layout_below="@+id/ivLikeIcon"
+        android:paddingTop="6dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_marginLeft="5dp"

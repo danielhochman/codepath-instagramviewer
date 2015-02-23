@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.runops.instagramviewer.R;
 import com.runops.instagramviewer.model.Comment;
 import com.runops.instagramviewer.model.Media;
+import com.runops.instagramviewer.model.User;
 import com.runops.instagramviewer.transformation.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
@@ -59,7 +60,6 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
                     R.layout.item_media, parent, false);
 
             viewHolder.tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
-            viewHolder.tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
             viewHolder.tvLikeCount = (TextView) convertView.findViewById(R.id.tvLikeCount);
             viewHolder.tvRelativeTime = (TextView) convertView.findViewById(R.id.tvRelativeTime);
             viewHolder.ivPrimaryImage = (ImageView) convertView.findViewById(R.id.ivPrimaryImage);
@@ -79,14 +79,6 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
                 then.getTime(), now.getTime(), DateUtils.MINUTE_IN_MILLIS).toString();
         viewHolder.tvRelativeTime.setText(relativeTime.replaceAll("(\\d+)\\s(.).+", "$1$2"));
 
-
-        if (media.getCaption() != null) {
-            viewHolder.tvCaption.setText(formatHashtagsAndNames(media.getUser().getUsername(), media.getCaption().getText()));
-        }
-        else {
-            viewHolder.tvCaption.setText("");
-        }
-
         viewHolder.tvLikeCount.setText(
                 formatNumber(media.getLikes().getCount()) + " likes");
 
@@ -97,19 +89,21 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
         Picasso.with(getContext()).load(media.getUser().getProfilePicture()).transform(new RoundedTransformation())
                 .into(viewHolder.ivProfilePicture);
 
-
-        // Comments stuff
+        // Comments and caption stuff
         viewHolder.llComments.removeAllViews();
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View commentSum = inflater.inflate(R.layout.item_inline_comment, null);
-        TextView tvCommentSum = (TextView) commentSum.findViewById(R.id.tvComment);
-        String numberOfComments = formatNumber(media.getComments().getCount());
-        tvCommentSum.setText(Html.fromHtml(
-                "<b><font color=\"#AAAAAA\">" + numberOfComments + " comments</font></b>"));
-        viewHolder.llComments.addView(commentSum);
-
         List<Comment> commentsList = media.getComments().getCommentList();
+        if (media.getCaption() != null) {
+            User user = new User();
+            user.setUsername(media.getUser().getUsername());
+            Comment captionComment = new Comment();
+            captionComment.setText(media.getCaption().getText());
+            captionComment.setFrom(user);
+
+            commentsList.add(0, captionComment);
+        }
+
         for (int i=0; i<min(6, commentsList.size()); i++) {
             Comment comment = commentsList.get(i);
             View llComment = inflater.inflate(R.layout.item_inline_comment, null);
@@ -118,6 +112,13 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
             tvComment.setLinkTextColor(getContext().getResources().getColor(R.color.primary_blue));
             viewHolder.llComments.addView(llComment);
         }
+
+        View commentSum = inflater.inflate(R.layout.item_inline_comment, null);
+        TextView tvCommentSum = (TextView) commentSum.findViewById(R.id.tvComment);
+        String numberOfComments = formatNumber(media.getComments().getCount());
+        tvCommentSum.setText(Html.fromHtml(
+                "<b><font color=\"#AAAAAA\">" + numberOfComments + " comments</font></b>"));
+        viewHolder.llComments.addView(commentSum, 1);
 
         return convertView;
     }
