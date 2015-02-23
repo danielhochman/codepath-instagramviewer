@@ -8,10 +8,7 @@ This is an Android demo application for displaying popular photos from Instagram
 
 ![Video Walkthrough](http://i.imgur.com/ng7OjlO.gif)
 
-**Setup**:
-
-Add your credential from the [Instagram Client Manager](https://instagram.com/developer/clients/manage/) to [credentials.xml](app/src/main/res/values/credentials.xml)
-
+**Setup**: Add your credential from the [Instagram Client Manager](https://instagram.com/developer/clients/manage/) to [credentials.xml](app/src/main/res/values/credentials.xml)
 
 **Completed user stories**:
  - *Required:* Users can scroll through popular photos from Instagram
