@@ -38,6 +38,8 @@ public class FeedActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
+        getSupportActionBar();
+
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -69,7 +71,7 @@ public class FeedActivity extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 Log.e("viewer", "problem occurred!", error);
-                Toast.makeText(getApplicationContext(), "Problem fetching", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "Problem fetching", Toast.LENGTH_SHORT).show();
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -82,18 +84,4 @@ public class FeedActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

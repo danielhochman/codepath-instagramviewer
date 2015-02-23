@@ -3,6 +3,20 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
+
+        <!-- Remove actionbar shadow -->
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/primary_blue</item>
+        <item name="background">@color/primary_blue</item>
+
+        <item name="android:icon">@drawable/ic_launcher</item>
     </style>
 
 </resources>

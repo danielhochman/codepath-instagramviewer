@@ -7,7 +7,6 @@ import android.text.TextPaint;
 import android.text.format.DateUtils;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,8 +57,8 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
 
         if (media.getCaption() != null) {
             String htmlText = media.getCaption().getText().replaceAll("([#@][A-Za-z0-9_]+)", "<a href=\"#\">$1</a>");
-            Log.i("viewer", htmlText);
 
+            // Prevent underlining of links
             Spannable s = (Spannable) Html.fromHtml(htmlText);
             for (URLSpan u: s.getSpans(0, s.length(), URLSpan.class)) {
                 s.setSpan(new UnderlineSpan() {
@@ -70,10 +69,15 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
             }
             tvCaption.setText(s);
         }
+        else {
+            tvCaption.setText("");
+        }
+
         tvLikeCount.setText(
                 NumberFormat.getNumberInstance(Locale.getDefault()).format(media.getLikes().getCount()) + " likes");
 
         Picasso.with(getContext()).load(media.getImages().getStandardResolution().getUrl())
+                .placeholder(R.drawable.ic_placeholder)
                 .into(ivPrimaryImage);
 
         Picasso.with(getContext()).load(media.getUser().getProfilePicture()).transform(new RoundedTransformation())
