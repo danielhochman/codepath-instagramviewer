@@ -30,29 +30,45 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
         super(context, 0, mediaList);
     }
 
+    // View lookup cache
+    private static class ViewHolder {
+        TextView tvUsername;
+        TextView tvCaption;
+        TextView tvLikeCount;
+        TextView tvRelativeTime;
+        ImageView ivPrimaryImage;
+        ImageView ivProfilePicture;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Media media = getItem(position);
 
+        ViewHolder viewHolder;
         if (convertView == null) {
+            viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.item_media, parent, false);
+
+            viewHolder.tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
+            viewHolder.tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
+            viewHolder.tvLikeCount = (TextView) convertView.findViewById(R.id.tvLikeCount);
+            viewHolder.tvRelativeTime = (TextView) convertView.findViewById(R.id.tvRelativeTime);
+            viewHolder.ivPrimaryImage = (ImageView) convertView.findViewById(R.id.ivPrimaryImage);
+            viewHolder.ivProfilePicture = (ImageView) convertView.findViewById(R.id.ivProfilePicture);
+
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
-        TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
-        TextView tvLikeCount = (TextView) convertView.findViewById(R.id.tvLikeCount);
-        TextView tvRelativeTime = (TextView) convertView.findViewById(R.id.tvRelativeTime);
-        ImageView ivPrimaryImage = (ImageView) convertView.findViewById(R.id.ivPrimaryImage);
-        ImageView ivProfilePicture = (ImageView) convertView.findViewById(R.id.ivProfilePicture);
-
-        tvUsername.setText(media.getUser().getUsername());
+        viewHolder.tvUsername.setText(media.getUser().getUsername());
 
         Date now = new Date();
         Date then = new Date(media.getCreatedTime() * 1000);
         String relativeTime = DateUtils.getRelativeTimeSpanString(
                 then.getTime(), now.getTime(), DateUtils.MINUTE_IN_MILLIS).toString();
-        tvRelativeTime.setText(relativeTime.replaceAll("(\\d+)\\s(.).+", "$1$2"));
+        viewHolder.tvRelativeTime.setText(relativeTime.replaceAll("(\\d+)\\s(.).+", "$1$2"));
 
 
         if (media.getCaption() != null) {
@@ -67,21 +83,21 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
                     }
                 }, s.getSpanStart(u), s.getSpanEnd(u), 0);
             }
-            tvCaption.setText(s);
+            viewHolder.tvCaption.setText(s);
         }
         else {
-            tvCaption.setText("");
+            viewHolder.tvCaption.setText("");
         }
 
-        tvLikeCount.setText(
+        viewHolder.tvLikeCount.setText(
                 NumberFormat.getNumberInstance(Locale.getDefault()).format(media.getLikes().getCount()) + " likes");
 
         Picasso.with(getContext()).load(media.getImages().getStandardResolution().getUrl())
                 .placeholder(R.drawable.ic_placeholder)
-                .into(ivPrimaryImage);
+                .into(viewHolder.ivPrimaryImage);
 
         Picasso.with(getContext()).load(media.getUser().getProfilePicture()).transform(new RoundedTransformation())
-                .into(ivProfilePicture);
+                .into(viewHolder.ivProfilePicture);
 
         return convertView;
     }
