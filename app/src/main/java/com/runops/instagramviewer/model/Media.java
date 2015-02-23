@@ -8,6 +8,7 @@ public class Media {
     private Images images;
     private Likes likes;
     private Long created_time;
+    private Comments comments;
 
     public String getId() {
         return id;
@@ -31,5 +32,9 @@ public class Media {
 
     public long getCreatedTime() {
         return created_time;
+    }
+
+    public Comments getComments() {
+        return comments;
     }
 }

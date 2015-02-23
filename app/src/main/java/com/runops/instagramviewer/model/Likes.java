@@ -1,9 +1,9 @@
 package com.runops.instagramviewer.model;
 
 public class Likes {
-    private int count;
+    private long count;
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 }
