@@ -25,8 +25,6 @@ import retrofit.client.Response;
 
 public class FeedActivity extends ActionBarActivity {
 
-    private static final String CLIENT_ID = "db6e497b51c74edaab8939e9308904ef";
-
     private ArrayList<Media> items;
     private MediaArrayAdapter feedAdapter;
 
@@ -58,7 +56,9 @@ public class FeedActivity extends ActionBarActivity {
 
 
     public void fetchPopularPhotos() {
-        InstagramApi.getInstagramApiClient().getPopularMedia(CLIENT_ID, new Callback<Popular>() {
+        InstagramApi.getInstagramApiClient().getPopularMedia(
+                getString(R.string.instagram_client_id), new Callback<Popular>() {
+
             @Override
             public void success(Popular popular, Response response) {
                 List<Media> mediaList = popular.getMediaList();
