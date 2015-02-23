@@ -93,7 +93,7 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
         viewHolder.llComments.removeAllViews();
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        List<Comment> commentsList = media.getComments().getCommentList();
+        List<Comment> newList = new ArrayList<Comment>(media.getComments().getCommentList());
         if (media.getCaption() != null) {
             User user = new User();
             user.setUsername(media.getUser().getUsername());
@@ -101,11 +101,11 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
             captionComment.setText(media.getCaption().getText());
             captionComment.setFrom(user);
 
-            commentsList.add(0, captionComment);
+            newList.add(0, captionComment);
         }
 
-        for (int i=0; i<min(6, commentsList.size()); i++) {
-            Comment comment = commentsList.get(i);
+        for (int i=0; i<min(6, newList.size()); i++) {
+            Comment comment = newList.get(i);
             View llComment = inflater.inflate(R.layout.item_inline_comment, null);
             TextView tvComment = (TextView) llComment.findViewById(R.id.tvComment);
             tvComment.setText(formatHashtagsAndNames(comment.getFrom().getUsername(), comment.getText()));
@@ -118,7 +118,11 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
         String numberOfComments = formatNumber(media.getComments().getCount());
         tvCommentSum.setText(Html.fromHtml(
                 "<b><font color=\"#AAAAAA\">" + numberOfComments + " comments</font></b>"));
-        viewHolder.llComments.addView(commentSum, 1);
+        if (media.getCaption() != null) {
+            viewHolder.llComments.addView(commentSum, 1);
+        } else {
+            viewHolder.llComments.addView(commentSum, 0);
+        }
 
         return convertView;
     }
