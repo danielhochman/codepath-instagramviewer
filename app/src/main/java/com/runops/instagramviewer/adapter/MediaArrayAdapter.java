@@ -127,7 +127,7 @@ public class MediaArrayAdapter extends ArrayAdapter<Media>{
     }
 
     private Spannable formatHashtagsAndNames(String username, String text) {
-        String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_]+)", "<a href=\"#\">$1</a>");
+        String htmlCommentText = text.replaceAll("([#@][A-Za-z0-9_\\.]+)", "<a href=\"#\">$1</a>");
 
         // Prevent underlining of links
         Spannable s = (Spannable) Html.fromHtml(
